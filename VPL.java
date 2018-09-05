@@ -1,5 +1,14 @@
+package com.company;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.*;
 import java.util.*;
+@Getter
+@Setter
+
 
 public class VPL
 {
@@ -169,9 +178,101 @@ public class VPL
 
             // put your work right here!
 
-            if ( op == oppCode ) {
+
+            if ( op == noppCode ) {
                 mem[ bp+2 + a ] = - mem[ bp+2 + b ];
             }
+            else if ( op == labelCode) {}
+            else if ( op == callCode) {}
+            else if ( op == passCode) {}
+            else if ( op == allocCode) {}
+            else if ( op == returnCode) {}
+            else if ( op == getRetvalCode) {}
+            else if ( op == jumpCode) {}
+            else if ( op == condJumpCode) {}
+            else if ( op == addCode) {
+                setmem(a,getmem(b) + getmem(c));
+            }
+            else if ( op == subCode) {
+                setmem(a, getmem(b) - getmem(c));
+            }
+            else if ( op == multCode) {
+                setmem(a, getmem(b) * getmem(c));
+            }
+            else if ( op == divCode) {
+                setmem(a, getmem(b) / getmem(c));
+            }
+            else if ( op == remCode) {
+                setmem(a, getmem(b) % getmem(c));
+            }
+            else if ( op == equalCode) {
+                setmem(a, (getmem(b)== getmem(c))?1:0);
+            }
+            else if ( op == notEqualCode) {
+                setmem(a, (getmem(b)!= getmem(c))?1:0);
+            }
+            else if ( op == lessCode) {
+                setmem(a, (getmem(b) < getmem(c)?1:0));
+            }
+            else if ( op == lessEqualCode) {
+                setmem(a, (getmem(b) <= getmem(c)?1:0));
+            }
+            else if ( op == andCode) {
+                setmem(a, (getmem(b) & getmem(c)));
+            }
+            else if ( op == orCode) {
+                setmem(a, (getmem(b) | getmem(c)));
+            }
+            else if ( op == notCode) {
+                setmem(a, getmem(b) == 0?1:0);
+            }
+            else if ( op == oppCode) {
+                setmem(a, -getmem(b));
+            }
+            else if ( op == litCode) {
+                setmem(a, b);
+            }
+            else if ( op == copyCode) {
+                setmem(a, getmem(b));
+
+            }
+            else if ( op == getCode) {
+            }
+            else if ( op == putCode) {
+
+            }
+            else if ( op == haltCode) {
+                break;
+            }
+            else if ( op == inputCode) {
+                Scanner read = new Scanner(System.in);
+                try  {
+                    System.out.println("? ");
+                    setmem(a, Integer.parseInt(read.nextLine()));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    read.close();                                                                                                                                                                                                                                                                                                                                                                                           ?                                                                                   ?
+                }
+            }
+            else if ( op == outputCode) {
+                System.out.print(getmem(a));
+            }
+            else if ( op == newlineCode) {
+                System.out.print("\r\n");
+            }
+            else if ( op == symbolCode) {
+
+            }
+            else if ( op == newCode) {
+
+            }
+            else if ( op == allocGlobalCode) {}
+            else if ( op == toGlobalCode) {}
+            else if ( op == fromGlobalCode) {}
+            else if ( op == debugCode) {}
+
 
 
             else
@@ -185,9 +286,39 @@ public class VPL
         }while( !done );
 
 
+    }// main
+
+    public static void setmem (int a, int n) {
+
+        mem[bp + 2 + a] = n;
     }
-    // main
+
+    public static  int getmem (int a) {
+
+        return mem[bp + 2 + a];
+    }
+
+    public static  void setGlobal () {
+
+    }
+
+    public static int getGlobal (int a) {
+
+        return a;
+    }
+
+
+    public static void setHeap (){
+
+    }
+
+    public static int getHeap () {
+
+    }
+
+
     // use symbolic names for all opcodes:
+
     // op to produce comment
     private static final int noopCode = 0;
 
