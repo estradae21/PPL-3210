@@ -185,10 +185,9 @@ public class VPL
         }while( !done );
 
 
-    }// main
-
+    }
+    // main
     // use symbolic names for all opcodes:
-
     // op to produce comment
     private static final int noopCode = 0;
 
