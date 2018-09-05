@@ -189,7 +189,14 @@ public class VPL
             else if ( op == returnCode) {}
             else if ( op == getRetvalCode) {}
             else if ( op == jumpCode) {}
-            else if ( op == condJumpCode) {}
+            else if ( op == condJumpCode) {
+                if (ip > 0) {
+                    ip = label
+                }
+                else {
+                    ip++
+                }
+            }
             else if ( op == addCode) {
                 setmem(a,getmem(b) + getmem(c));
             }
