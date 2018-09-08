@@ -184,11 +184,18 @@ public class VPL
             }
             else if ( op == labelCode) {}
             else if ( op == callCode) {}
-            else if ( op == passCode) {}
-            else if ( op == allocCode) {}
+            else if ( op == passCode) { }
+            //????????????????????????????????????????
+            else if ( op == allocCode) {
+                sp += numPassed
+            }
             else if ( op == returnCode) {}
-            else if ( op == getRetvalCode) {}
-            else if ( op == jumpCode) {}
+            else if ( op == getRetvalCode) {
+                a = rv
+            }
+            else if ( op == jumpCode) {
+                ip = label
+            }
             else if ( op == condJumpCode) {
                 if (ip > 0) {
                     ip = label
