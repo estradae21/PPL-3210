@@ -183,8 +183,8 @@ public class VPL
                break;
                 // mem[ bp+2 + a ] = - mem[ bp+2 + b ];
             }
-            else if ( op == labelCode) {}
-            else if ( op == callCode) {}
+            else if ( op == labelCode) {} //NEED DONE
+            else if ( op == callCode) {}  //NEED DONE
             else if ( op == passCode) {
                 int i = sp
                 while (sp < mem.length - 1) {
@@ -294,13 +294,13 @@ public class VPL
                     System.out.print(symb);
                 }
             }
-            else if ( op == newCode) {
+            else if ( op == newCode) {  //NEED DONE
 
             }
-            else if ( op == allocGlobalCode) {}
-            else if ( op == toGlobalCode) {}
-            else if ( op == fromGlobalCode) {}
-            else if ( op == debugCode) {}
+            else if ( op == allocGlobalCode) {} //NEED DONE
+            else if ( op == toGlobalCode) {}    //NEED DONE
+            else if ( op == fromGlobalCode) {}  //NEED DONE
+            else if ( op == debugCode) {}       //NEED DONE
 
 
 
