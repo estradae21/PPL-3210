@@ -198,21 +198,21 @@ public class VPL
             }
             //????????????????????????????????????????
             else if ( op == allocCode) {
-                sp += numPassed
+                sp += numPassed;
             }
             else if ( op == returnCode) {}
             else if ( op == getRetvalCode) {
-                a = rv
+                a = rv;
             }
             else if ( op == jumpCode) {
-                ip = label
+                ip = label;
             }
             else if ( op == condJumpCode) {
                 if (ip > 0) {
-                    ip = label
+                    ip = label;
                 }
                 else {
-                    ip++
+                    ip++;
                 }
             }
             else if ( op == addCode) {
