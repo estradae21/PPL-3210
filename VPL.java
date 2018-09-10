@@ -267,14 +267,14 @@ public class VPL
                 setmem(a, getmem(b));
             }
             else if ( op == getCode) {
-                int temp;
-                temp = (getmem(b) + getmem(c));
-                setHeap(temp);
+                int pos = getmem(b) + getmem(c);
+                getmem(a) = mem[pos]
+                ip += 4;
             }
             else if ( op == putCode) {
-                int temp;
-                temp = (getmem(b) +  getmem(c));
-                getHeap(temp)
+                int pos = getmem(a) + getmem(b);
+                mem[pos] = getmem(c);
+                ip += 4;
             }
             else if ( op == haltCode) {
                 done = true
