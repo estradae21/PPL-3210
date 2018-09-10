@@ -1,3 +1,9 @@
+/*
+    Ernesto Estrada
+    Dan Zapfel
+    Wyatt Hyatt
+ */
+
 package com.company;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
@@ -253,17 +259,25 @@ public class VPL
             }
             else if ( op == oppCode) {
                 setmem(a, -getmem(b));
+                ip += 3;
             }
             else if ( op == litCode) {
                 setmem(a, b);
+                ip += 3;
             }
             else if ( op == copyCode) {
                 setmem(a, getmem(b));
+                ip += 3;
             }
             else if ( op == getCode) {
+                int pos = getmem(b) + getmem(c);
+                getmem(a) = mem[pos]
+                ip += 4;
             }
             else if ( op == putCode) {
-
+                int pos = getmem(a) + getmem(b);
+                mem[pos] = getmem(c);
+                ip += 4;
             }
             else if ( op == haltCode) {
                 done = true
@@ -334,11 +348,11 @@ public class VPL
 
 
     public static void setHeap (){
-
+        return;
     }
 
     public static int getHeap () {
-
+        return
     }
 
 
