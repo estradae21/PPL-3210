@@ -1,3 +1,9 @@
+VPL interpreter in Java
+
+Compile VPL.java and IntPair.java
+To run in terminal: java VPL fileName.txt memorySize
+memorySize is an integer value
+
 Project 1 [first serious submission due by Monday, September 10]
 
 Implement VPL by starting from the given file VPL.java found in the VPL folder at the
