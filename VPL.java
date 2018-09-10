@@ -261,9 +261,14 @@ public class VPL
                 setmem(a, getmem(b));
             }
             else if ( op == getCode) {
+                int temp;
+                temp = (getmem(b) + getmem(c));
+                setHeap(temp);
             }
             else if ( op == putCode) {
-
+                int temp;
+                temp = (getmem(b) +  getmem(c));
+                getHeap(temp)
             }
             else if ( op == haltCode) {
                 done = true
@@ -334,11 +339,11 @@ public class VPL
 
 
     public static void setHeap (){
-
+        return;
     }
 
     public static int getHeap () {
-
+        return
     }
 
 
