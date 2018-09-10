@@ -180,11 +180,22 @@ public class VPL
 
 
             if ( op == noppCode ) {
-                mem[ bp+2 + a ] = - mem[ bp+2 + b ];
+               break;
+                // mem[ bp+2 + a ] = - mem[ bp+2 + b ];
             }
             else if ( op == labelCode) {}
             else if ( op == callCode) {}
-            else if ( op == passCode) { }
+            else if ( op == passCode) {
+                int i = sp
+                while (sp < mem.length - 1) {
+                    if (mem[i] ==  null) {
+                        mem[bp + 2 + a] = mem[i]
+                    }
+                    else {
+                        i++
+                    }
+                }
+            }
             //????????????????????????????????????????
             else if ( op == allocCode) {
                 sp += numPassed
@@ -248,7 +259,6 @@ public class VPL
             }
             else if ( op == copyCode) {
                 setmem(a, getmem(b));
-
             }
             else if ( op == getCode) {
             }
@@ -256,7 +266,8 @@ public class VPL
 
             }
             else if ( op == haltCode) {
-                break;
+                done = true
+                //break;
             }
             else if ( op == inputCode) {
                 Scanner read = new Scanner(System.in);
