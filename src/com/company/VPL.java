@@ -29,7 +29,7 @@ public class VPL
         keys = new Scanner( System.in );
 
         if( args.length != 2 ) {
-            System.err.println("Usage: java com.company.VPL <vpl program> <memory size>" );
+            System.err.println("Usage: java VPL <vpl program> <memory size>" );
             System.exit(1);
         }
 
@@ -489,4 +489,4 @@ public class VPL
         }
     }// showMem
 
-}// com.company.VPL
+}// VPL
