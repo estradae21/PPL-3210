@@ -302,7 +302,10 @@ public class VPL
                 System.out.print("\r\n");
             }
             else if ( op == symbolCode) {
-
+                if (a >32 && a<126) {
+                    char symb = (char) a;
+                    System.out.print(symb);
+                }
             }
             else if ( op == newCode) {
 
