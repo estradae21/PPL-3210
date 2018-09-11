@@ -4,8 +4,9 @@
     Wyatt Hyatt
     Megan Jordal
     Alex Tusa
- */
+*/
 
+package com.company;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class VPL
         keys = new Scanner( System.in );
 
         if( args.length != 2 ) {
-            System.out.println("Usage: java VPL <vpl program> <memory size>" );
+            System.err.println("Usage: java com.company.VPL <vpl program> <memory size>" );
             System.exit(1);
         }
 
@@ -184,8 +185,12 @@ public class VPL
                break;
                 // mem[ bp+2 + a ] = - mem[ bp+2 + b ];
             }
-            else if ( op == labelCode) {}
-            else if ( op == callCode) {}
+            else if ( op == labelCode) {
+                // TODO
+            }
+            else if ( op == callCode) {
+                // TODO
+            }
             else if ( op == passCode) {
                 int i = sp;
                 while (sp < mem.length - 1) {
@@ -201,7 +206,9 @@ public class VPL
             else if ( op == allocCode) {
                 sp += numPassed;
             }
-            else if ( op == returnCode) {}
+            else if ( op == returnCode) {
+                //TODO
+            }
             else if ( op == getRetvalCode) {
                 a = rv;
             }
@@ -297,7 +304,7 @@ public class VPL
                 System.out.print("\r\n");
             }
             else if ( op == symbolCode) {
-                if (a >32 && a<126) {
+                if (a > 32 && a <126) {
                     char symb = (char) a;
                     System.out.print(symb);
                 }
@@ -317,13 +324,15 @@ public class VPL
             else if ( op == fromGlobalCode) {
                 mem[gp + b] = getmem(a);
             }
-            else if ( op == debugCode) {}
+            else if ( op == debugCode) {
+                //TODO
+            }
 
 
 
             else
             {
-                System.out.println("Fatal error: unknown opcode [" + op + "]" );
+                System.err.println("Fatal error: unknown opcode [" + op + "]" );
                 System.exit(1);
             }
 
@@ -465,7 +474,7 @@ public class VPL
 
         else
         {
-            System.out.println("Fatal error: unknown opcode [" + opcode + "]" );
+            System.err.println("Fatal error: unknown opcode [" + opcode + "]" );
             System.exit(1);
             return -1;
         }
@@ -480,4 +489,4 @@ public class VPL
         }
     }// showMem
 
-}// VPL
+}// com.company.VPL

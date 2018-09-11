@@ -1,3 +1,5 @@
+package com.company;
+
 public class IntPair
 {
     public int first, second;
