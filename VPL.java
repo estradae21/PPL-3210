@@ -2,6 +2,8 @@
     Ernesto Estrada
     Dan Zapfel
     Wyatt Hyatt
+    Megan Jordal
+    Alex Tusa
  */
 
 package com.company;
