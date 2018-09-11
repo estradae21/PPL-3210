@@ -261,10 +261,10 @@ public class VPL
                 setmem(a, getmem(b));
             }
             else if ( op == getCode) {
-
+                setmem(a, (getmem(b)+getmem(c)));
             }
             else if ( op == putCode) {
-
+                setmem((getmem(a)+getmem(b)), c);
             }
             else if ( op == haltCode) {
                 done = true
@@ -295,11 +295,16 @@ public class VPL
                 }
             }
             else if ( op == newCode) {  //NEED DONE
-
+                hp -= getmem(b);
+                setmem(a, hp);
             }
             else if ( op == allocGlobalCode) {} //NEED DONE
-            else if ( op == toGlobalCode) {}    //NEED DONE
-            else if ( op == fromGlobalCode) {}  //NEED DONE
+            else if ( op == toGlobalCode) {
+                setmem((gp + a), b);
+            }    //NEED DONE
+            else if ( op == fromGlobalCode) {
+                setmem(a, (gp+n));
+            }  //NEED DONE
             else if ( op == debugCode) {}       //NEED DONE
 
 
@@ -318,7 +323,6 @@ public class VPL
     }// main
 
     public static void setmem (int a, int n) {
-
         mem[bp + 2 + a] = n;
     }
 
