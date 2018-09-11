@@ -2,18 +2,14 @@
     Ernesto Estrada
     Dan Zapfel
     Wyatt Hyatt
+    Alex Tusa
  */
 
-package com.company;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.*;
-import java.util.*;
-@Getter
-@Setter
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 
 
 public class VPL
@@ -42,63 +38,61 @@ public class VPL
 
         // load the program into the front part of
         // memory
-        Scanner input = new Scanner( new File( fileName ) );
-        String line;
-        StringTokenizer st;
-        int opcode;
-
-        ArrayList<IntPair> labels, holes;
-        labels = new ArrayList<IntPair>();
-        holes = new ArrayList<IntPair>();
+        ArrayList<IntPair> labels;
+        ArrayList<IntPair> holes;
         int label;
+        int k;
+        try (Scanner input = new Scanner(new File(fileName))) {
+            String line;
+            StringTokenizer st;
+            int opcode;
 
-        // load the code
+            labels = new ArrayList<>();
+            holes = new ArrayList<>();
 
-        int k=0;
-        while ( input.hasNextLine() ) {
-            line = input.nextLine();
-            System.out.println("parsing line [" + line + "]");
-            if( line != null )
-            {// extract any tokens
-                st = new StringTokenizer( line );
-                if( st.countTokens() > 0 )
-                {// have a token, so must be an instruction (as opposed to empty line)
+            // load the code
 
-                    opcode = Integer.parseInt(st.nextToken());
+            k = 0;
+            while (input.hasNextLine()) {
+                line = input.nextLine();
+                System.out.println("parsing line [" + line + "]");
+                if (line != null) {// extract any tokens
+                    st = new StringTokenizer(line);
+                    if (st.countTokens() > 0) {// have a token, so must be an instruction (as opposed to empty line)
 
-                    // load the instruction into memory:
+                        opcode = Integer.parseInt(st.nextToken());
 
-                    if( opcode == labelCode )
-                    {// note index that comes where label would go
-                        label = Integer.parseInt(st.nextToken());
-                        labels.add( new IntPair( label, k ) );
-                    }
-                    else if( opcode == noopCode ){
-                    }
-                    else
-                    {// opcode actually gets stored
-                        mem[k] = opcode;  k++;
+                        // load the instruction into memory:
 
-                        if( opcode == callCode || opcode == jumpCode ||
-                                opcode == condJumpCode )
-                        {// note the hole immediately after the opcode to be filled in later
-                            label = Integer.parseInt( st.nextToken() );
-                            mem[k] = label;  holes.add( new IntPair( k, label ) );
-                            ++k;
-                        }
+                        if (opcode == labelCode) {// note index that comes where label would go
+                            label = Integer.parseInt(st.nextToken());
+                            labels.add(new IntPair(label, k));
+                        } else if (opcode == noopCode) {
+                            assert true;
+                        } else {// opcode actually gets stored
+                            mem[k] = opcode;
+                            k++;
 
-                        // load correct number of arguments (following label, if any):
-                        for( int j=0; j<numArgs(opcode); ++j )
-                        {
-                            mem[k] = Integer.parseInt(st.nextToken());
-                            ++k;
-                        }
+                            if (opcode == callCode || opcode == jumpCode ||
+                                    opcode == condJumpCode) {// note the hole immediately after the opcode to be filled in later
+                                label = Integer.parseInt(st.nextToken());
+                                mem[k] = label;
+                                holes.add(new IntPair(k, label));
+                                ++k;
+                            }
 
-                    }// not a label
+                            // load correct number of arguments (following label, if any):
+                            for (int j = 0; j < numArgs(opcode); ++j) {
+                                mem[k] = Integer.parseInt(st.nextToken());
+                                ++k;
+                            }
 
-                }// have a token, so must be an instruction
-            }// have a line
-        }// loop to load code
+                        }// not a label
+
+                    }// have a token, so must be an instruction
+                }// have a line
+            }// loop to load code
+        }
 
         //System.out.println("after first scan:");
         //showMem( 0, k-1 );
@@ -185,40 +179,40 @@ public class VPL
             // put your work right here!
 
 
-            if ( op == noppCode ) {
+            if ( op == noopCode ) {
                break;
                 // mem[ bp+2 + a ] = - mem[ bp+2 + b ];
             }
             else if ( op == labelCode) {}
             else if ( op == callCode) {}
             else if ( op == passCode) {
-                int i = sp
+                int i = sp;
                 while (sp < mem.length - 1) {
-                    if (mem[i] ==  null) {
-                        mem[bp + 2 + a] = mem[i]
+                    if (mem[i] == 0) {
+                        mem[bp + 2 + a] = mem[i];
                     }
                     else {
-                        i++
+                        i++;
                     }
                 }
             }
             //????????????????????????????????????????
             else if ( op == allocCode) {
-                sp += numPassed
+                sp += numPassed;
             }
             else if ( op == returnCode) {}
             else if ( op == getRetvalCode) {
-                a = rv
+                a = rv;
             }
             else if ( op == jumpCode) {
-                ip = label
+                ip = label;
             }
             else if ( op == condJumpCode) {
                 if (ip > 0) {
-                    ip = label
+                    ip = label;
                 }
                 else {
-                    ip++
+                    ip++;
                 }
             }
             else if ( op == addCode) {
@@ -271,7 +265,7 @@ public class VPL
             }
             else if ( op == getCode) {
                 int pos = getmem(b) + getmem(c);
-                getmem(a) = mem[pos]
+                mem[pos] = getmem(a);
                 ip += 4;
             }
             else if ( op == putCode) {
@@ -280,7 +274,7 @@ public class VPL
                 ip += 4;
             }
             else if ( op == haltCode) {
-                done = true
+                done = true;
                 //break;
             }
             else if ( op == inputCode) {
@@ -292,7 +286,7 @@ public class VPL
                 catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    read.close();                                                                                                                                                                                                                                                                                                                                                                                           ?                                                                                   ?
+                    read.close();
                 }
             }
             else if ( op == outputCode) {
@@ -309,7 +303,7 @@ public class VPL
             }
             else if ( op == newCode) {
                 hp = mem[hp -b];
-                getmem(a) = hp;
+                hp = getmem(a);
             }
             else if ( op == allocGlobalCode) {
                 gp = codeEnd + 1;
@@ -317,10 +311,10 @@ public class VPL
                 sp = bp + 2;
             }
             else if ( op == toGlobalCode) {
-                mem[gp + b] = getmem(a)
+                mem[gp + b] = getmem(a);
             }
             else if ( op == fromGlobalCode) {
-                getmem(a) = mem[gp + b];
+                mem[gp + b] = getmem(a);
             }
             else if ( op == debugCode) {}
 
@@ -364,7 +358,7 @@ public class VPL
     }
 
     public static int getHeap () {
-        return
+        return 0;
     }
 
 
