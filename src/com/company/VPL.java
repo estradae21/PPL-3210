@@ -16,17 +16,15 @@ import java.util.StringTokenizer;
 
 public class VPL
 {
-    static String fileName;
-    static Scanner keys;
+    private static String fileName;
 
-    static int max;
-    static int[] mem;
-    static int ip, bp, sp, rv, hp, numPassed, gp;
+    private static int[] mem;
+    private static int bp;
     static int step;
 
     public static void main(String[] args) throws Exception {
 
-        keys = new Scanner( System.in );
+        Scanner keys = new Scanner(System.in);
 
         if( args.length != 2 ) {
             System.err.println("Usage: java VPL <vpl program> <memory size>" );
@@ -35,7 +33,7 @@ public class VPL
 
         fileName = args[0];
 
-        max = Integer.parseInt( args[1] );
+        int max = Integer.parseInt(args[1]);
         mem = new int[max];
 
         // load the program into the front part of
@@ -101,33 +99,36 @@ public class VPL
 
         // fill in all the holes:
         int index;
-        for( int m=0; m<holes.size(); ++m )
-        {
-            label = holes.get(m).second;
+        for (IntPair hole : holes) {
+            label = hole.second;
             index = -1;
-            for( int n=0; n<labels.size(); ++n )
-                if( labels.get(n).first == label )
-                    index = labels.get(n).second;
-            mem[ holes.get(m).first ] = index;
+            for (IntPair label1 : labels)
+                if (label1.first == label)
+                    index = label1.second;
+            mem[hole.first] = index;
         }
 
         System.out.println("after replacing labels:");
         showMem( 0, k-1 );
 
         // initialize registers:
-        bp = k;  sp = k+2;  ip = 0;  rv = -1;  hp = max;
-        numPassed = 0;
+        bp = k;
+        int sp = k + 2;
+        int ip = 0;
+        int rv = -1;
+        int hp = max;
+        int numPassed = 0;
 
         int codeEnd = bp-1;
 
         System.out.println("Code is " );
         showMem( 0, codeEnd );
 
-        gp = codeEnd + 1;
+        int gp = codeEnd + 1;
 
         // start execution:
         boolean done = false;
-        int op, a=0, b=0, c=0;
+        int op;
         int actualNumArgs;
 
         int step = 0;
@@ -155,9 +156,11 @@ public class VPL
 
             oldIp = ip;
 
-            op = mem[ ip ];  ip++;
+            op = mem[ip];  ip++;
             // extract the args into a, b, c for convenience:
-            a = -1;  b = -2;  c = -3;
+            int a = -1;
+            int b = -2;
+            int c = -3;
 
             // numArgs is wrong for these guys, need one more!
             if( op == callCode || op == jumpCode ||
@@ -169,11 +172,11 @@ public class VPL
                 actualNumArgs = numArgs( op );
 
             if( actualNumArgs == 1 )
-            {  a = mem[ ip ];  ip++;  }
+            {  a = mem[ip];  ip++;  }
             else if( actualNumArgs == 2 )
-            {  a = mem[ ip ];  ip++;  b = mem[ ip ]; ip++; }
+            {  a = mem[ip];  ip++;  b = mem[ip]; ip++; }
             else if( actualNumArgs == 3 )
-            {  a = mem[ ip ];  ip++;  b = mem[ ip ]; ip++; c = mem[ ip ]; ip++; }
+            {  a = mem[ip];  ip++;  b = mem[ip]; ip++; c = mem[ip]; ip++; }
 
             // implement all operations here:
             // ********************************************
@@ -183,7 +186,6 @@ public class VPL
 
             if ( op == noopCode ) {
                break;
-                // mem[ bp+2 + a ] = - mem[ bp+2 + b ];
             }
             else if ( op == labelCode) {
                 // TODO
@@ -283,18 +285,13 @@ public class VPL
             }
             else if ( op == haltCode) {
                 done = true;
-                //break;
             }
             else if ( op == inputCode) {
-                Scanner read = new Scanner(System.in);
-                try  {
+                try (Scanner read = new Scanner(System.in)) {
                     System.out.println("? ");
                     setmem(a, Integer.parseInt(read.nextLine()));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                } finally {
-                    read.close();
                 }
             }
             else if ( op == outputCode) {
@@ -352,25 +349,6 @@ public class VPL
 
         return mem[bp + 2 + a];
     }
-
-    public static  void setGlobal () {
-
-    }
-
-    public static int getGlobal (int a) {
-
-        return a;
-    }
-
-
-    public static void setHeap (){
-        return;
-    }
-
-    public static int getHeap () {
-        return 0;
-    }
-
 
     // use symbolic names for all opcodes:
 
