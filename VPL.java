@@ -308,11 +308,20 @@ public class VPL
                 }
             }
             else if ( op == newCode) {
-
+                hp = mem[hp -b];
+                getmem(a) = hp;
             }
-            else if ( op == allocGlobalCode) {}
-            else if ( op == toGlobalCode) {}
-            else if ( op == fromGlobalCode) {}
+            else if ( op == allocGlobalCode) {
+                gp = codeEnd + 1;
+                bp = codeEnd + 2;
+                sp = bp + 2;
+            }
+            else if ( op == toGlobalCode) {
+                mem[gp + b] = getmem(a)
+            }
+            else if ( op == fromGlobalCode) {
+                getmem(a) = mem[gp + b];
+            }
             else if ( op == debugCode) {}
 
 
