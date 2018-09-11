@@ -303,7 +303,7 @@ public class VPL
                 setmem((gp + a), b);
             }    //NEED DONE
             else if ( op == fromGlobalCode) {
-                setmem(a, (gp+n));
+                setmem(a, (gp+b));
             }  //NEED DONE
             else if ( op == debugCode) {}       //NEED DONE
 
