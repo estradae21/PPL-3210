@@ -16,15 +16,23 @@ import java.util.StringTokenizer;
 
 public class VPL
 {
-    private static String fileName;
+    static String fileName;
+    static Scanner keys;
 
-    private static int[] mem;
-    private static int bp;
+    static int max;
+    static int[] mem;
+    static int ip;
+    static int bp;
+    static int sp;
+    static int rv;
+    static int hp;
+    static int numPassed;
+    static int gp;
     static int step;
 
     public static void main(String[] args) throws Exception {
 
-        Scanner keys = new Scanner(System.in);
+        keys = new Scanner( System.in );
 
         if( args.length != 2 ) {
             System.err.println("Usage: java VPL <vpl program> <memory size>" );
@@ -33,36 +41,36 @@ public class VPL
 
         fileName = args[0];
 
-        int max = Integer.parseInt(args[1]);
+        max = Integer.parseInt( args[1] );
         mem = new int[max];
 
         // load the program into the front part of
         // memory
-        ArrayList<IntPair> labels;
-        ArrayList<IntPair> holes;
-        int label;
-        int k;
-        try (Scanner input = new Scanner(new File(fileName))) {
-            String line;
-            StringTokenizer st;
-            int opcode;
+        Scanner input = new Scanner( new File( fileName ) );
+        String line;
+        StringTokenizer st;
+        int opcode;
 
-            labels = new ArrayList<>();
-            holes = new ArrayList<>();
+        ArrayList<IntPair> labels, holes;
+        labels = new ArrayList<>();
+        holes = new ArrayList<>();
+        int label = 0;
 
-            // load the code
+        // load the code
 
-            k = 0;
-            while (input.hasNextLine()) {
-                line = input.nextLine();
-                System.out.println("parsing line [" + line + "]");
-                if (line != null) {// extract any tokens
-                    st = new StringTokenizer(line);
-                    if (st.countTokens() > 0) {// have a token, so must be an instruction (as opposed to empty line)
+        int k=0;
+        while ( input.hasNextLine() ) {
+            line = input.nextLine();
+            System.out.println("parsing line [" + line + "]");
+            if( line != null )
+            {// extract any tokens
+                st = new StringTokenizer( line );
+                if( st.countTokens() > 0 )
+                {// have a token, so must be an instruction (as opposed to empty line)
 
-                        opcode = Integer.parseInt(st.nextToken());
+                    opcode = Integer.parseInt(st.nextToken());
 
-                        // load the instruction into memory:
+                    // load the instruction into memory:
 
                         if (opcode == labelCode) {// note index that comes where label would go
                             label = Integer.parseInt(st.nextToken());
@@ -89,10 +97,9 @@ public class VPL
 
                         }// not a label
 
-                    }// have a token, so must be an instruction
-                }// have a line
-            }// loop to load code
-        }
+                }// have a token, so must be an instruction
+            }// have a line
+        }// loop to load code
 
         //System.out.println("after first scan:");
         //showMem( 0, k-1 );
@@ -112,12 +119,8 @@ public class VPL
         showMem( 0, k-1 );
 
         // initialize registers:
-        bp = k;
-        int sp = k + 2;
-        int ip = 0;
-        int rv = -1;
-        int hp = max;
-        int numPassed = 0;
+        bp = k;  sp = k+2;  ip = 0;  rv = -1;  hp = max;
+        numPassed = 0;
 
         int codeEnd = bp-1;
 
