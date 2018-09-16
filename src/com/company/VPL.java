@@ -46,7 +46,7 @@ public class VPL
 
         // load the program into the front part of
         // memory
-        Scanner input = new Scanner( new File( fileName ) );
+        Scanner input = new Scanner( new File( System.getProperty("user.dir") +"\\" + fileName ) );
         String line;
         StringTokenizer st;
         int opcode;
