@@ -230,15 +230,8 @@ public class VPL
 
             // put your work right here!
 
-
-            if ( op == noopCode ) {
-               assert true;
-            }
-            else if ( op == labelCode) {
-                assert true; // This is handled in the loading of the program when filling in holes
-            }
-            else if ( op == callCode) {
-
+            if ( op == callCode) {
+                // TODO
             }
             else if ( op == passCode) {
                 for (int i = sp; i < hp; i++) {
