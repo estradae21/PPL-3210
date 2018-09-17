@@ -311,14 +311,12 @@ public class VPL
             }
             else if ( op == oppCode) {
                 setmem(a, -getmem(b));
-                ip += 3;
             }
             else if ( op == litCode) {
                 setmem(a, b);
             }
             else if ( op == copyCode) {
                 setmem(a, getmem(b));
-                ip += 3;
             }
             else if ( op == getCode) {
                 int pos = getmem(b) + getmem(c);
