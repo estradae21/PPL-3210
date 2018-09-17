@@ -319,12 +319,10 @@ public class VPL
                 setmem(a, getmem(b));
             }
             else if ( op == getCode) {
-                int pos = getmem(b) + getmem(c);
-                mem[pos] = getmem(a);
+                setmem(a, mem[hp + getmem(b) + getmem(c)]);
             }
             else if ( op == putCode) {
-                int pos = getmem(a) + getmem(b);
-                mem[pos] = getmem(c);
+                mem[hp + getmem(a) + getmem(b)] = getmem(c);
             }
             else if ( op == haltCode) {
                 done = true;
