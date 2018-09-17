@@ -46,65 +46,93 @@ public class VPL
 
         // load the program into the front part of
         // memory
-        Scanner input = new Scanner( new File( System.getProperty("user.dir") +"\\" + fileName ) );
-        String line;
-        StringTokenizer st;
-        int opcode;
+        ArrayList<IntPair> labels;
+        ArrayList<IntPair> holes;
+        int label;
+        int k;
+        try (Scanner input = new Scanner(new File(System.getProperty("user.dir") + "\\" + fileName))) {
+            String line;
+            StringTokenizer st;
+            int opcode;
 
-        ArrayList<IntPair> labels, holes;
-        labels = new ArrayList<>();
-        holes = new ArrayList<>();
-        int label = 0;
+            /**List that contains both the label names and the
+             * index in memory in which this label resides; Used
+             * to fill in the holes later
+             */
+            labels = new ArrayList<>();
 
-        // load the code
+            /**List that keeps track of all of the holes that have
+             * been created by how jumps are called or by how calls
+             * are performed
+             */
+            holes = new ArrayList<>();
 
-        int k=0;
-        while ( input.hasNextLine() ) {
-            line = input.nextLine();
-            System.out.println("parsing line [" + line + "]");
-            if( line != null )
-            {// extract any tokens
-                st = new StringTokenizer( line );
-                if( st.countTokens() > 0 )
-                {// have a token, so must be an instruction (as opposed to empty line)
+            /**Holds the integer name of whichever label is currently
+             * being processed
+             */
+            label = 0;
 
-                    opcode = Integer.parseInt(st.nextToken());
+            // load the code
 
-                    // load the instruction into memory:
+            /** Keeps track of what index we are at in memory during initialization */
+            k = 0;
+            while (input.hasNextLine()) {
+                line = input.nextLine();
+                System.out.println("parsing line [" + line + "]");
+                if (line != null) {// extract any tokens
+                    st = new StringTokenizer(line);
+                    if (st.countTokens() > 0) {// have a token, so must be an instruction (as opposed to empty line)
 
-                        if (opcode == labelCode) {// note index that comes where label would go
-                            label = Integer.parseInt(st.nextToken());
-                            labels.add(new IntPair(label, k));
-                        } else if (opcode == noopCode) {
-                            assert true;
-                        } else {// opcode actually gets stored
-                            mem[k] = opcode;
-                            k++;
+                        opcode = Integer.parseInt(st.nextToken());
 
-                            if (opcode == callCode || opcode == jumpCode ||
-                                    opcode == condJumpCode) {// note the hole immediately after the opcode to be filled in later
+                        // load the instruction into memory:
+
+                            if (opcode == labelCode) {// note index that comes where label would go
                                 label = Integer.parseInt(st.nextToken());
-                                mem[k] = label;
-                                holes.add(new IntPair(k, label));
-                                ++k;
-                            }
+                                labels.add(new IntPair(label, k));
+                            } else if (opcode == noopCode) {
+                                assert true;
+                            } else {// opcode actually gets stored
+                                mem[k] = opcode;
+                                k++;
 
-                            // load correct number of arguments (following label, if any):
-                            for (int j = 0; j < numArgs(opcode); ++j) {
-                                mem[k] = Integer.parseInt(st.nextToken());
-                                ++k;
-                            }
+                                // If instruction is a call to a function or label
+                                if (opcode == callCode || opcode == jumpCode ||
+                                        opcode == condJumpCode) {// note the hole immediately after the opcode to be filled in later
+                                    label = Integer.parseInt(st.nextToken());
+                                    mem[k] = label; // Store this label in memory at the current location
+                                    holes.add(new IntPair(k, label)); // Add this hole to list to be filled in later
+                                    ++k; // Create the hole
+                                }
 
-                        }// not a label
+                                // load correct number of arguments (following label, if any):
+                                for (int j = 0; j < numArgs(opcode); ++j) {
+                                    mem[k] = Integer.parseInt(st.nextToken());
+                                    ++k;
+                                }
 
-                }// have a token, so must be an instruction
-            }// have a line
-        }// loop to load code
+                            }// not a label
+
+                    }// have a token, so must be an instruction
+                }// have a line
+            }// loop to load code
+        }
 
         //System.out.println("after first scan:");
         //showMem( 0, k-1 );
 
         // fill in all the holes:
+        /**Iterate through holes list.
+         * For each hole in the list, find it's corresponding
+         * label in the labels list. Once that value is found,
+         * recall that in the labels list, the second integer
+         * in the pair is the index in memory from which the
+         * label is created. This is where we assign the index
+         * of memory that created this label to our index variable.
+         * Finally, store the index of where the label begins into
+         * memory where this hole occurs (which is the first integer
+         * in the integer pair object).
+         */
         int index;
         for (IntPair hole : holes) {
             label = hole.second;
@@ -119,7 +147,11 @@ public class VPL
         showMem( 0, k-1 );
 
         // initialize registers:
-        bp = k;  sp = k+2;  ip = 0;  rv = -1;  hp = max;
+        bp = k;
+        sp = k+2; // Make room for our return pointer and return base pointer
+        ip = 0;
+        rv = -1;
+        hp = max; // Start the heap pointer at the end of memory
         numPassed = 0;
 
         int codeEnd = bp-1;
@@ -159,7 +191,8 @@ public class VPL
 
             oldIp = ip;
 
-            op = mem[ip];  ip++;
+            op = mem[ip];
+            ip++;
             // extract the args into a, b, c for convenience:
             int a = -1;
             int b = -2;
@@ -174,12 +207,24 @@ public class VPL
             else
                 actualNumArgs = numArgs( op );
 
-            if( actualNumArgs == 1 )
-            {  a = mem[ip];  ip++;  }
-            else if( actualNumArgs == 2 )
-            {  a = mem[ip];  ip++;  b = mem[ip]; ip++; }
-            else if( actualNumArgs == 3 )
-            {  a = mem[ip];  ip++;  b = mem[ip]; ip++; c = mem[ip]; ip++; }
+            if( actualNumArgs == 1 ) {
+                a = mem[ip];
+                ip++;
+            }
+            else if( actualNumArgs == 2 ) {
+                a = mem[ip];
+                ip++;
+                b = mem[ip];
+                ip++;
+            }
+            else if( actualNumArgs == 3 ) {
+                a = mem[ip];
+                ip++;
+                b = mem[ip];
+                ip++;
+                c = mem[ip];
+                ip++;
+            }
 
             // implement all operations here:
             // ********************************************
@@ -188,7 +233,7 @@ public class VPL
 
 
             if ( op == noopCode ) {
-               break;
+               assert true;
             }
             else if ( op == labelCode) {
                 // TODO
@@ -209,7 +254,7 @@ public class VPL
             }
             //????????????????????????????????????????
             else if ( op == allocCode) {
-                sp += numPassed;
+                sp += a;
             }
             else if ( op == returnCode) {
                 //TODO
@@ -270,7 +315,6 @@ public class VPL
             }
             else if ( op == litCode) {
                 setmem(a, b);
-                ip += 3;
             }
             else if ( op == copyCode) {
                 setmem(a, getmem(b));
