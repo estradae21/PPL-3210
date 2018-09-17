@@ -356,10 +356,10 @@ public class VPL
                 sp += a;
             }
             else if ( op == toGlobalCode) {
-                mem[gp + b] = getmem(a);
+                mem[gp + a] = getmem(b);
             }
             else if ( op == fromGlobalCode) {
-                mem[gp + b] = getmem(a);
+                setmem(a, mem[gp + b]);
             }
             else if ( op == debugCode) {
                 //TODO
