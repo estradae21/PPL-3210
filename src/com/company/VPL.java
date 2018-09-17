@@ -352,8 +352,8 @@ public class VPL
             }
             else if ( op == allocGlobalCode) {
                 gp = codeEnd + 1;
-                bp = codeEnd + 2;
-                sp = bp + 2;
+                bp += a;
+                sp += a;
             }
             else if ( op == toGlobalCode) {
                 mem[gp + b] = getmem(a);
