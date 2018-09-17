@@ -263,12 +263,7 @@ public class VPL
                 ip = mem[ip]; // Should be filled in during the loading of the program
             }
             else if ( op == condJumpCode) {
-                if (ip > 0) {
-                    ip = label;
-                }
-                else {
-                    ip++;
-                }
+                ip = (getmem(a) != 0) ? mem[ip] : ++ip;
             }
             else if ( op == addCode) {
                 setmem(a,getmem(b) + getmem(c));
