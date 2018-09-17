@@ -349,7 +349,7 @@ public class VPL
                 }
             }
             else if ( op == newCode) {
-                hp = mem[hp -b];
+                hp -= getmem(b);
                 setmem(a, hp);
             }
             else if ( op == allocGlobalCode) {
