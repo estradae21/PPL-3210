@@ -10,6 +10,7 @@ package com.company;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -43,6 +44,7 @@ public class VPL
 
         max = Integer.parseInt( args[1] );
         mem = new int[max];
+        Arrays.stream(mem).forEach(index -> index = -1); // This prevents any issues when adding to the stack or the heap
 
         // load the program into the front part of
         // memory
@@ -236,20 +238,15 @@ public class VPL
                assert true;
             }
             else if ( op == labelCode) {
-                // TODO
+                assert true; // This is handled in the loading of the program when filling in holes
             }
             else if ( op == callCode) {
-                // TODO
+
             }
             else if ( op == passCode) {
-                int i = sp;
-                while (sp < mem.length - 1) {
-                    if (mem[i] == 0) {
-                        mem[bp + 2 + a] = mem[i];
-                    }
-                    else {
-                        i++;
-                    }
+                for (int i = sp; i < hp; i++) {
+                    if (mem[i] == -1)
+                        mem[i] = getmem(a);
                 }
             }
             //????????????????????????????????????????
@@ -263,7 +260,7 @@ public class VPL
                 setmem(a, rv);
             }
             else if ( op == jumpCode) {
-                ip = label;
+                ip = mem[ip]; // Should be filled in during the loading of the program
             }
             else if ( op == condJumpCode) {
                 if (ip > 0) {
