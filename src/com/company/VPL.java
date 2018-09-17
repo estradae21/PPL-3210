@@ -295,10 +295,10 @@ public class VPL
                 setmem(a, (getmem(b)!= getmem(c))?1:0);
             }
             else if ( op == lessCode) {
-                setmem(a, (getmem(b) < getmem(c)?1:0));
+                setmem(a, (getmem(b) < getmem(c))?1:0);
             }
             else if ( op == lessEqualCode) {
-                setmem(a, (getmem(b) <= getmem(c)?1:0));
+                setmem(a, (getmem(b) <= getmem(c))?1:0);
             }
             else if ( op == andCode) {
                 setmem(a, (getmem(b) & getmem(c)));
@@ -307,7 +307,7 @@ public class VPL
                 setmem(a, (getmem(b) | getmem(c)));
             }
             else if ( op == notCode) {
-                setmem(a, getmem(b) == 0?1:0);
+                setmem(a, (getmem(b) == 0)?1:0);
             }
             else if ( op == oppCode) {
                 setmem(a, -getmem(b));
@@ -346,9 +346,8 @@ public class VPL
                 System.out.print("\r\n");
             }
             else if ( op == symbolCode) {
-                if (a > 32 && a <126) {
-                    char symb = (char) a;
-                    System.out.print(symb);
+                if (getmem(a) > 32 && getmem(a) < 126) {
+                    System.out.print((char) getmem(a));
                 }
             }
             else if ( op == newCode) {
