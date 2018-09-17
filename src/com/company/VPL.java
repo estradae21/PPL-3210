@@ -321,12 +321,10 @@ public class VPL
             else if ( op == getCode) {
                 int pos = getmem(b) + getmem(c);
                 mem[pos] = getmem(a);
-                ip += 4;
             }
             else if ( op == putCode) {
                 int pos = getmem(a) + getmem(b);
                 mem[pos] = getmem(c);
-                ip += 4;
             }
             else if ( op == haltCode) {
                 done = true;
@@ -352,7 +350,7 @@ public class VPL
             }
             else if ( op == newCode) {
                 hp = mem[hp -b];
-                hp = getmem(a);
+                setmem(a, hp);
             }
             else if ( op == allocGlobalCode) {
                 gp = codeEnd + 1;
