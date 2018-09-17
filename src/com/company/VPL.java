@@ -260,7 +260,7 @@ public class VPL
                 //TODO
             }
             else if ( op == getRetvalCode) {
-                a = rv;
+                setmem(a, rv);
             }
             else if ( op == jumpCode) {
                 ip = label;
