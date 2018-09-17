@@ -1,9 +1,9 @@
 /*
+    Alex Tusa
     Ernesto Estrada
     Dan Zapfel
     Wyatt Hyatt
     Megan Jordal
-    Alex Tusa
 */
 
 package com.company;
@@ -198,8 +198,7 @@ public class VPL
             int b = -2;
             int c = -3;
 
-            // numArgs is wrong for these guys, need one more!
-            if( op == callCode || op == jumpCode ||
+            if( op == callCode ||
                     op == condJumpCode )
             {
                 actualNumArgs = numArgs( op ) + 1;
