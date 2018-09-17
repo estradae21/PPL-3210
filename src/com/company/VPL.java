@@ -151,7 +151,7 @@ public class VPL
         sp = k+2; // Make room for our return pointer and return base pointer
         ip = 0;
         rv = -1;
-        hp = max; // Start the heap pointer at the end of memory
+        hp = max - 1; // Start the heap pointer at the end of memory (adjusted to allow for direct use in arrays)
         numPassed = 0;
 
         int codeEnd = bp-1;
