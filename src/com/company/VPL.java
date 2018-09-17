@@ -10,7 +10,6 @@ package com.company;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -44,7 +43,6 @@ public class VPL
 
         max = Integer.parseInt( args[1] );
         mem = new int[max];
-        Arrays.stream(mem).forEach(index -> index = -1); // This prevents any issues when adding to the stack or the heap
 
         // load the program into the front part of
         // memory
@@ -245,8 +243,10 @@ public class VPL
             }
             else if ( op == passCode) {
                 for (int i = sp; i < hp; i++) {
-                    if (mem[i] == -1)
+                    if (mem[i] == 0) {
                         mem[i] = getmem(a);
+                        break;
+                    }
                 }
             }
             //????????????????????????????????????????
