@@ -229,8 +229,15 @@ public class VPL
             // ********************************************
 
             // put your work right here!
+            if (op == noopCode) {
+                assert true;
+            }
 
-            if ( op == callCode) {
+            else if (op == labelCode) {
+                assert true;
+            }
+
+            else if ( op == callCode) {
                 // TODO
             }
             else if ( op == passCode) {
