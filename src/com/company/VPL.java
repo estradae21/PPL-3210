@@ -29,6 +29,8 @@ public class VPL
     static int numPassed;
     static int gp;
     static int step;
+    static int rbp;
+    static int rip;
 
     public static void main(String[] args) throws Exception {
 
@@ -198,8 +200,7 @@ public class VPL
             int b = -2;
             int c = -3;
 
-            if( op == callCode ||
-                    op == condJumpCode )
+            if( op == callCode || op == condJumpCode)
             {
                 actualNumArgs = numArgs( op ) + 1;
             }
@@ -238,7 +239,13 @@ public class VPL
             }
 
             else if ( op == callCode) {
-                // TODO
+                rip = ip + 1;
+                rbp = bp;
+                bp = sp;
+                sp += 2;
+                sp += numPassed;
+                numPassed = 0;
+                ip = mem[a];
             }
             else if ( op == passCode) {
                 for (int i = sp; i < hp; i++) {
@@ -253,6 +260,9 @@ public class VPL
                 sp += a;
             }
             else if ( op == returnCode) {
+                bp = mem[bp+1];
+                ip = mem[bp];
+                rv = mem[bp + 2 + a];
                 //TODO
             }
             else if ( op == getRetvalCode) {
@@ -353,7 +363,7 @@ public class VPL
                 setmem(a, mem[gp + b]);
             }
             else if ( op == debugCode) {
-                //TODO
+                done = true;
             }
 
 
