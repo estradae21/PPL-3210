@@ -4,6 +4,7 @@
     Dan Zapfel
     Wyatt Hyatt
     Megan Jordal
+    Inna Pshichenko
 */
 
 package com.company;
