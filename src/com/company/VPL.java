@@ -261,9 +261,10 @@ public class VPL
                 sp += a;
             }
             else if ( op == returnCode) {
-                bp = mem[bp+1];
-                ip = mem[bp];
                 rv = mem[bp + 2 + a];
+                ip = mem[bp];
+                sp = bp;
+                bp = mem[bp+1];
                 //TODO
             }
             else if ( op == getRetvalCode) {
