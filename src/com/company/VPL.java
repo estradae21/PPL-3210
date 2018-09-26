@@ -17,14 +17,62 @@ import java.util.StringTokenizer;
 
 public class VPL
 {
+    // op to produce comment
+    private static final int noopCode = 0;
+    // ops involved with registers
+    private static final int labelCode = 1;
+    private static final int callCode = 2;
+    private static final int passCode = 3;
+    private static final int allocCode = 4;
+    private static final int returnCode = 5;  // return a means "return and put
+    // copy of value stored in cell a in register rv
+    private static final int getRetvalCode = 6;//op a means "copy rv into cell a"
+    private static final int jumpCode = 7;
+    private static final int condJumpCode = 8;
+    // arithmetic ops
+    private static final int addCode = 9;
+    private static final int subCode = 10;
+    private static final int multCode = 11;
+    private static final int divCode = 12;
+    private static final int remCode = 13;
+    private static final int equalCode = 14;
+    private static final int notEqualCode = 15;
+    private static final int lessCode = 16;
+
+    // use symbolic names for all opcodes:
+    private static final int lessEqualCode = 17;
+    private static final int andCode = 18;
+    private static final int orCode = 19;
+    private static final int notCode = 20;
+    private static final int oppCode = 21;
+    // ops involving transfer of data
+    private static final int litCode = 22;  // litCode a b means "cell a gets b"
+    private static final int copyCode = 23;// copy a b means "cell a gets cell b"
+    private static final int getCode = 24; // op a b means "cell a gets
+    // contents of cell whose
+    // index is stored in b"
+    private static final int putCode = 25;  // op a b means "put contents
+    // system-level ops:
+    private static final int haltCode = 26;
+    private static final int inputCode = 27;
+    private static final int outputCode = 28;
+    private static final int newlineCode = 29;
+    private static final int symbolCode = 30;
+    private static final int newCode = 31;
+    // global variable ops:
+    private static final int allocGlobalCode = 32;
+    private static final int toGlobalCode = 33;
+    private static final int fromGlobalCode = 34;
+    // debug ops:
+    private static final int debugCode = 35;
     static String fileName;
     static Scanner keys;
-
     static int max;
     static int[] mem;
     static int ip;
     static int bp;
     static int sp;
+    // of cell b in cell whose offset is stored in cell a"
     static int rv;
     static int hp;
     static int numPassed;
@@ -33,7 +81,7 @@ public class VPL
     static int rbp;
     static int rip;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         keys = new Scanner( System.in );
 
@@ -49,11 +97,11 @@ public class VPL
 
         // load the program into the front part of
         // memory
-        ArrayList<IntPair> labels;
-        ArrayList<IntPair> holes;
+        final ArrayList<IntPair> labels;
+        final ArrayList<IntPair> holes;
         int label;
         int k;
-        try (Scanner input = new Scanner(new File(System.getProperty("user.dir") + "\\" + fileName))) {
+        try (final Scanner input = new Scanner(new File(System.getProperty("user.dir") + "/Tests/" + fileName))) {
             String line;
             StringTokenizer st;
             int opcode;
@@ -137,10 +185,10 @@ public class VPL
          * in the integer pair object).
          */
         int index;
-        for (IntPair hole : holes) {
+        for (final IntPair hole : holes) {
             label = hole.second;
             index = -1;
-            for (IntPair label1 : labels)
+            for (final IntPair label1 : labels)
                 if (label1.first == label)
                     index = label1.second;
             mem[hole.first] = index;
@@ -157,7 +205,7 @@ public class VPL
         hp = max - 1; // Start the heap pointer at the end of memory (adjusted to allow for direct use in arrays)
         numPassed = 0;
 
-        int codeEnd = bp-1;
+        final int codeEnd = bp-1;
 
         System.out.println("Code is " );
         showMem( 0, codeEnd );
@@ -240,13 +288,13 @@ public class VPL
             }
 
             else if ( op == callCode) {
-                rip = ip + 1;
-                rbp = bp;
+                mem[sp] = ip + 1;
+                mem[sp + 1] = bp;
                 bp = sp;
-                sp += 2;
-                sp += numPassed;
+                sp += 2 + numPassed;
+//                ip = a;
+                ip = a;
                 numPassed = 0;
-                ip = mem[a];
             }
             else if ( op == passCode) {
                 for (int i = sp; i < hp; i++) {
@@ -332,10 +380,10 @@ public class VPL
                 done = true;
             }
             else if ( op == inputCode) {
-                try (Scanner read = new Scanner(System.in)) {
+                try (final Scanner read = new Scanner(System.in)) {
                     System.out.println("? ");
                     setmem(a, Integer.parseInt(read.nextLine()));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -384,77 +432,21 @@ public class VPL
 
     }// main
 
-    public static void setmem (int a, int n) {
+    public static void setmem (final int a, final int n) {
 
         mem[bp + 2 + a] = n;
     }
 
-    public static  int getmem (int a) {
+    public static  int getmem (final int a) {
 
         return mem[bp + 2 + a];
     }
-
-    // use symbolic names for all opcodes:
-
-    // op to produce comment
-    private static final int noopCode = 0;
-
-    // ops involved with registers
-    private static final int labelCode = 1;
-    private static final int callCode = 2;
-    private static final int passCode = 3;
-    private static final int allocCode = 4;
-    private static final int returnCode = 5;  // return a means "return and put
-    // copy of value stored in cell a in register rv
-    private static final int getRetvalCode = 6;//op a means "copy rv into cell a"
-    private static final int jumpCode = 7;
-    private static final int condJumpCode = 8;
-
-    // arithmetic ops
-    private static final int addCode = 9;
-    private static final int subCode = 10;
-    private static final int multCode = 11;
-    private static final int divCode = 12;
-    private static final int remCode = 13;
-    private static final int equalCode = 14;
-    private static final int notEqualCode = 15;
-    private static final int lessCode = 16;
-    private static final int lessEqualCode = 17;
-    private static final int andCode = 18;
-    private static final int orCode = 19;
-    private static final int notCode = 20;
-    private static final int oppCode = 21;
-
-    // ops involving transfer of data
-    private static final int litCode = 22;  // litCode a b means "cell a gets b"
-    private static final int copyCode = 23;// copy a b means "cell a gets cell b"
-    private static final int getCode = 24; // op a b means "cell a gets
-    // contents of cell whose
-    // index is stored in b"
-    private static final int putCode = 25;  // op a b means "put contents
-    // of cell b in cell whose offset is stored in cell a"
-
-    // system-level ops:
-    private static final int haltCode = 26;
-    private static final int inputCode = 27;
-    private static final int outputCode = 28;
-    private static final int newlineCode = 29;
-    private static final int symbolCode = 30;
-    private static final int newCode = 31;
-
-    // global variable ops:
-    private static final int allocGlobalCode = 32;
-    private static final int toGlobalCode = 33;
-    private static final int fromGlobalCode = 34;
-
-    // debug ops:
-    private static final int debugCode = 35;
 
     // return the number of arguments after the opcode,
     // except ops that have a label return number of arguments
     // after the label, which always comes immediately after
     // the opcode
-    private static int numArgs( int opcode )
+    private static int numArgs(final int opcode )
     {
         // highlight specially behaving operations
         if( opcode == labelCode ) return 1;  // not used
@@ -503,7 +495,7 @@ public class VPL
 
     }// numArgs
 
-    private static void showMem( int a, int b )
+    private static void showMem(final int a, final int b )
     {
         for( int k=a; k<=b; ++k )
         {
